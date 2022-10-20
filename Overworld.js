@@ -15,42 +15,22 @@ class Overworld {
             this.ctx.drawImage(image, 0, 0);
         }
         
-        //Draw the hero
-        const x = 5;
-        const y = 6;
-        const hero = new Image();
-        hero.src = "images/characters/people/hero.png"
-        hero.onload = () => {
-            this.ctx.drawImage(
-                hero, 
-                0, //left cut 
-                0, //top cut
-                32, //width cut
-                32, //heigth cut
-                x * 16 - 8, //x position on the map (multiple with one block, soustract for center)
-                y * 16 - 18, //y position on the map
-                32, //size(width) of the image on the map
-                32 //size(heigth) of the image on the map
-                );
-        }
+        //Place sone game objects!!! 
+        const hero = new GameObject({
+            x: 5,
+            y: 6,
+        });
 
-        //Draw the shadow of the hero
+        const npc1 = new GameObject({
+            x: 7,
+            y: 9,
+            src: "images/characters/people/npc1.png"
+        });
 
-        const shadow = new Image();
-        shadow.src = "images/characters/shadow.png"
-        shadow.onload = () => {
-            this.ctx.drawImage(
-                shadow, 
-                0, //left cut 
-                0, //top cut
-                32, //width cut
-                32, //heigth cut
-                x * 16 - 8, //x position on the map (multiple with one block, soustract for center)
-                y * 16 - 18, //y position on the map
-                32, //size(width) of the image on the map
-                32 //size(heigth) of the image on the map
-                );
-        }
-
+        setTimeout(() => {
+            hero.sprite.draw(this.ctx);
+            npc1.sprite.draw(this.ctx);
+        }, 200);
+        
     }
 }
