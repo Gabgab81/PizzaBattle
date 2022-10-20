@@ -1,8 +1,10 @@
-(function () {
+(function (){
+    console.log('Hello from init');
 
-  const overworld = new Overworld({
-    element: document.querySelector(".game-container")
-  });
-  overworld.init();
+    const overlord = new Overworld({
+        element: document.querySelector(".game-container")
+    });
+
+    overlord.init();
 
 })();
