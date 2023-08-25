@@ -38,7 +38,7 @@ class Person extends GameObject {
 
       if (this.movingProgressRemaining > 0) {
         this.sprite.setAnimation("walk-" + this.direction);
-        console.log("hello")
+        // console.log("hello")
       }
     }
 
