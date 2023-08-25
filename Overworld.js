@@ -7,30 +7,32 @@ class Overworld {
     }
 
     startGameLoop(){
-        const step = () => {
+      const step = () => {
 
-            //Clear off the canvas
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        //Clear off the canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            //Draw Lower Layer
-            this.map.drawLowerImage(this.ctx);
+        //Draw Lower Layer
+        this.map.drawLowerImage(this.ctx);
 
-            //Draw Game Objects
-            Object.values(this.map.gameObjects).forEach(object => {
-                object.update({
-                    arrow: this.directionInput.direction
-                });
-                object.sprite.draw(this.ctx);
-            })
+        //Draw Game Objects
+        Object.values(this.map.gameObjects).forEach(object => {
+          object.update({
+              arrow: this.directionInput.direction
+          });
+          object.sprite.draw(this.ctx);
+        })
 
-            //Draw Upper Layer
-            this.map.drawUpperImage(this.ctx);
-
-            requestAnimationFrame(() => {
-                step();
-            })
-        }
-        step();
+        //Draw Upper Layer
+        this.map.drawUpperImage(this.ctx);
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            step();
+          })
+        }, 8)
+          
+      }
+      step();
     }
 
     init(){
