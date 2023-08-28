@@ -40,6 +40,7 @@ class Sprite {
     }
 
     get frame() {
+      // console.log(this.currentAnimationFrame)
       return this.animations[this.currentAnimation][this.currentAnimationFrame]
     }
 
@@ -74,9 +75,10 @@ class Sprite {
       const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
 
       this.isShadowLoaded && ctx.drawImage(this.shadow, x, y);
-
+      
+      // console.log(this.frame)
       const [frameX, frameY] = this.frame;
-
+      // console.log(frameX, frameY)
       this.isLoaded && ctx.drawImage(this.image,
           frameX * 32, frameY * 32, //cut position
           32, 32, //Size of the cut
