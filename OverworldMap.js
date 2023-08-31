@@ -1,15 +1,17 @@
 class OverworldMap {
   constructor(config) {
-      this.gameObjects = config.gameObjects;
-      this.walls = config.walls || {};
+    this.overworld = null;
+    this.gameObjects = config.gameObjects;
+    this.walls = config.walls || {};
+    this.cutsceneSpaces = config.cutsceneSpaces || {};
 
-      this.lowerImage = new Image();
-      this.lowerImage.src = config.lowerSrc;
+    this.lowerImage = new Image();
+    this.lowerImage.src = config.lowerSrc;
 
-      this.upperImage = new Image();
-      this.upperImage.src = config.upperSrc;
+    this.upperImage = new Image();
+    this.upperImage.src = config.upperSrc;
 
-      this.isCutscenePlaying = false;
+    this.isCutscenePlaying = false;
   }
 
   drawLowerImage(ctx, cameraPerson) {
@@ -62,6 +64,29 @@ class OverworldMap {
     }
 
     this.isCutscenePlaying = false;
+
+    //Reset NPCs to do their idle behavior
+    Object.values(this.gameObjects).forEach(object => object.doBehaviorEvent(this))
+  }
+
+  checkActionCutscene() {
+    const hero = this.gameObjects["hero"];
+    const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
+    const match = Object.values(this.gameObjects).find(object => {
+      return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`
+    });
+    if (!this.isCutscenePlaying && match && match.talking.length) {
+      this.startCutscene(match.talking[0].events)
+    }
+    console.log({match})
+  }
+
+  checkForFootstepCutscene() {
+    const hero = this.gameObjects["hero"];
+    const match = this.cutsceneSpaces[ `${hero.x},${hero.y}` ];
+    if (!this.isCutscenePlaying && match) {
+      this.startCutscene( match[0].events )
+    }
   }
 
   addWall(x, y) {
@@ -86,33 +111,42 @@ window.OverworldMaps = {
       upperSrc: "images/maps/DemoUpper.png",
       gameObjects: {
         hero: new Person({
-            isPlayerControlled: true,
-            x: utils.withGrid(5),
-            y: utils.withGrid(6),
+          isPlayerControlled: true,
+          x: utils.withGrid(5),
+          y: utils.withGrid(6),
         }),
         npcA: new Person({
-            x: utils.withGrid(7),
-            y: utils.withGrid(9),
-            src: "images/characters/people/npc1.png",
-            behaviorLoop: [
-              { type: "stand", direction: "left", time: 800 },
-              { type: "stand", direction: "up", time: 300 },
-              { type: "stand", direction: "right", time: 1200 },
-              { type: "stand", direction: "down", time: 1500 },
-            ]
+          x: utils.withGrid(7),
+          y: utils.withGrid(9),
+          src: "images/characters/people/npc1.png",
+          behaviorLoop: [
+            { type: "stand", direction: "left", time: 800 },
+            { type: "stand", direction: "up", time: 300 },
+            { type: "stand", direction: "right", time: 1200 },
+            { type: "stand", direction: "down", time: 1500 },
+          ],
+          talking: [
+            {
+              events: [
+                { type: "textMessage", text: "huh??", faceHero: "npcA"},
+                { type: "textMessage", text: "What do you want??"},
+                { who: "hero", type: "walk", direction: "left" },
+              ]
+            }
+          ]
         }),
         npcB: new Person({
-          x: utils.withGrid(3),
-          y: utils.withGrid(7),
+          x: utils.withGrid(8),
+          y: utils.withGrid(5),
           src: "images/characters/people/npc2.png",
-          behaviorLoop: [
-            { type: "walk", direction: "left" },
-            { type: "stand", direction: "up", time: 800 },
-            { type: "walk", direction: "up" },
-            { type: "walk", direction: "right" },
-            { type: "walk", direction: "down" },
-          ]
-      })
+          // behaviorLoop: [
+          //   { type: "walk", direction: "left" },
+          //   { type: "stand", direction: "up", time: 800 },
+          //   { type: "walk", direction: "up" },
+          //   { type: "walk", direction: "right" },
+          //   { type: "walk", direction: "down" },
+          // ]
+        })
       },
       walls : {
         //"16, 16": true
@@ -120,26 +154,56 @@ window.OverworldMaps = {
         [utils.asGridCoord(8, 6)]: true,
         [utils.asGridCoord(7, 7)]: true,
         [utils.asGridCoord(8, 7)]: true
+      },
+      cutsceneSpaces: {
+        [utils.asGridCoord(7, 4)]: [
+          {
+            events: [
+
+              { who: "npcB", type: "walk", direction: "left" },
+              { who: "npcB", type: "stand", direction: "up" },
+              { type: "textMessage", text: "Stop!!!!" },
+              { who: "npcB", type: "walk", direction: "right" },
+              { who: "npcB", type: "stand", direction: "down" },
+              { who: "hero", type: "walk", direction: "down" },
+              { who: "hero", type: "walk", direction: "left" },
+            ]
+          }
+        ],
+        [utils.asGridCoord(5, 10)]: [
+          {
+            events: [
+              { type: "changeMap", map: "Kitchen" },
+            ]
+          }
+        ]
       }
     },
     Kitchen: {
-        lowerSrc: "images/maps/KitchenLower.png",
-        upperSrc: "images/maps/KitchenUpper.png",
-        gameObjects: {
-            hero: new GameObject({
-                x: 3,
-                y: 5,
-            }),
-            npcA: new GameObject({
-                x: 9,
-                y: 6,
-                src: "images/characters/people/npc2.png"
-            }),
-            npcB: new GameObject({
-                x: 10,
-                y: 8,
-                src: "images/characters/people/npc3.png"
-            })
-        }
+
+      lowerSrc: "images/maps/KitchenLower.png",
+      upperSrc: "images/maps/KitchenUpper.png",
+      gameObjects: {
+        hero: new Person({
+          isPlayerControlled: true,
+          x: utils.withGrid(5),
+          y: utils.withGrid(5),
+        }),
+        npcB: new Person({
+          x: utils.withGrid(10),
+          y: utils.withGrid(8),
+          src: "images/characters/people/npc3.png",
+          talking: [
+            {
+              events: [
+                { type: "textMessage", text: "huh??", faceHero: "npcB"},
+                { type: "textMessage", text: "What do you want??"},
+                { who: "hero", type: "walk", direction: "left" },
+              ]
+            }
+          ]
+        }),
+      },
+
     }
 }
