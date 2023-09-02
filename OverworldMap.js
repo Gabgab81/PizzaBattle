@@ -174,6 +174,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "changeMap", map: "Kitchen" },
+              { who: "hero", type: "stand", direction: "up" },
             ]
           }
         ]
@@ -187,7 +188,8 @@ window.OverworldMaps = {
         hero: new Person({
           isPlayerControlled: true,
           x: utils.withGrid(5),
-          y: utils.withGrid(5),
+          y: utils.withGrid(10),
+          direction: "up",
         }),
         npcB: new Person({
           x: utils.withGrid(10),
@@ -204,6 +206,15 @@ window.OverworldMaps = {
           ]
         }),
       },
-
+      cutsceneSpaces: {
+        [utils.asGridCoord(5, 10)]: [
+          {
+            events: [
+              { type: "changeMap", map: "DemoRoom" },
+              { who: "hero", type: "stand", direction: "up" },
+            ]
+          }
+        ]
+      }
     }
 }
