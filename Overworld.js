@@ -80,11 +80,12 @@ class Overworld {
 
       this.startGameLoop()
       
-      // this.map.startCutscene([
+      this.map.startCutscene([
         
-      //   { type: "changeMap", map: "DemoRoom"}
-      //   // { type: "textMessage", text: "Welcome in Pizza Legend???"}
-      // ])
+        { type: "battle" }
+        // { type: "changeMap", map: "DemoRoom"}
+        // { type: "textMessage", text: "Welcome in Pizza Legend???"}
+      ])
 
         
     }
