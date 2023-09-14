@@ -18,8 +18,9 @@ class TurnCycle {
       caster,
       enemy,
     });
-    const resultingEvents = submission.action.success;
-    // console.log({resultingEvents})
+    
+    const resultingEvents = caster.getReplacedEvents(submission.action.success);
+    console.log({resultingEvents})
     // console.log(submission.action)
     for (let i = 0; i < resultingEvents.length; i++) {
       const event = {
@@ -31,6 +32,27 @@ class TurnCycle {
       }
       // console.log("In loop", event)
       await this.onNewEvent(event);
+    }
+
+    //Check for post events
+    //{Do things AFTER your original turn submission}
+    const postEvents = caster.getPostEvents();
+    // console.log({postEvents})
+    for (let i=0; i < postEvents.length; i++) {
+      const event = {
+        ...postEvents[i],
+        submission,
+        action: submission.Action,
+        caster,
+        target: submission.target,
+      }
+      await this.onNewEvent(event);
+    }
+
+    //Check for status expire
+    const expiredEvent = caster.decrementStatus();
+    if (expiredEvent) {
+      await this.onNewEvent(expiredEvent);
     }
 
     this.currentTeam = this.currentTeam === 'player' ? "enemy" : "player";
