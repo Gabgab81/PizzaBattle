@@ -78,7 +78,6 @@ class OverworldMap {
     if (!this.isCutscenePlaying && match && match.talking.length) {
       this.startCutscene(match.talking[0].events)
     }
-    console.log({match})
   }
 
   checkForFootstepCutscene() {

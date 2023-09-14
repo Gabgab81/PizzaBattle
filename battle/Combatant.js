@@ -21,6 +21,7 @@ class Combatant {
   }
 
   createElement() {
+    // console.log(this.id)
     this.hubElement = document.createElement("div");
     this.hubElement.classList.add("Combatant");
     this.hubElement.setAttribute("data-combatant", this.id);
