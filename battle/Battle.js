@@ -61,6 +61,18 @@ class Battle {
       combatant.id = key;
       combatant.init(this.element);
     })
+
+    console.log("Hello from battle.js")
+    this.turnCycle = new TurnCycle({
+      battle: this,
+      onNewEvent: event => {
+        return new Promise(resolve => {
+          const battleEvent = new BattleEvent(event, this);
+          battleEvent.init(resolve);
+        })
+      }
+    });
+    this.turnCycle.init()
   }
 
 }

@@ -3,9 +3,9 @@ window.Actions = {
     name: "Whomp!",
     // type:
     success: [
-      { type: "textMessage", text: "{CASTER} uses Womp!" },
-      // { type: "animation", animation: 'WillBeDefinedHere' },
-      // { type: "stateChange", damage: 10 },
+      { type: "textMessage", text: "{CASTER} uses {ACTION}!" },
+      { type: "animation", animation: 'spin' },
+      { type: "stateChange", damage: 10 },
     ]
   }
 }
