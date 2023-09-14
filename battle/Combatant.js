@@ -69,6 +69,62 @@ class Combatant {
 
     //Update level on screen
     this.hubElement.querySelector(".Combatant_level").innerText = this.level;
+
+    //Update Status
+    const statusElement = this.hubElement.querySelector(".Combatant_status");
+    if (this.status) {
+      statusElement.innerText = this.status.type;
+      statusElement.style.display = "block";
+    } else {
+      statusElement.innerText = "";
+      statusElement.style.display = "none";
+    }
+  }
+
+  getReplacedEvents(originalEvents) {
+    console.log(this.status)
+    // console.log(this.status)
+    // console.log(utils.randomFromArray([true]))
+    if (this.status?.type === "clumsy" && utils.randomFromArray([true, false, false])) {
+      console.log("hello from getREplaced")
+      return [
+        { type: "textMessage", text: `${this.name} flops over!`},
+      ]
+    }
+
+    return originalEvents;
+  }
+
+  getPostEvents() {
+
+    if(this.status?.type === "saucy") {
+      //Return battle event
+      return [
+        { type: "textMessage", text: "Too saucy" },
+        { type: "stateChange", recover: 5, onCaster: true }
+      ]
+
+    }
+
+    return [];
+  }
+
+  decrementStatus() {
+    if (this.status?.expiresIn > 0) {
+      // console.log(this.status.type)
+      this.status.expiresIn -= 1;
+      if (this.status.expiresIn === 0) {
+        const statusType = this.status.type
+        this.update({
+          status: null,
+        })
+        return {
+          type: "textMessage",
+          text: `${statusType} expired!`,
+        }
+      }
+    }
+    return null
   }
 
   init(container) {

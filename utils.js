@@ -38,6 +38,11 @@ const utils = {
     })
   },
 
+  randomFromArray(array) {
+    // console.log("hello from random")
+    return array[ Math.floor(Math.random()*array.length) ]
+  },
+
   emitEvent(name, detail) {
     const event = new CustomEvent(name, {
       detail
