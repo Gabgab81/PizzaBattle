@@ -85,7 +85,7 @@ class Combatant {
     console.log(this.status)
     // console.log(this.status)
     // console.log(utils.randomFromArray([true]))
-    if (this.status?.type === "clumsy" && utils.randomFromArray([true, false, false])) {
+    if (this.status?.type === "clumsy" && utils.randomFromArray([true, false])) {
       console.log("hello from getREplaced")
       return [
         { type: "textMessage", text: `${this.name} flops over!`},

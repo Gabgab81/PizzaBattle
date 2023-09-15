@@ -10,6 +10,7 @@ class Battle {
         maxXp: 100,
         level: 1,
         status: null,
+        isPlayerControlled: true,
       }, this),
       "enemy1": new Combatant({
         ...Pizzas.v001,
@@ -62,7 +63,7 @@ class Battle {
       combatant.init(this.element);
     })
 
-    console.log("Hello from battle.js")
+    // console.log("Hello from battle.js")
     this.turnCycle = new TurnCycle({
       battle: this,
       onNewEvent: event => {
