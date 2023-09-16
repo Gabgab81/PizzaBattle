@@ -18,6 +18,10 @@ class TurnCycle {
       caster,
       enemy,
     });
+
+    if (submission.instanceId) {
+      this.battle.items = this.battle.items.filter(i => i.instanceId !== submission.instanceId)
+    }
     
     const resultingEvents = caster.getReplacedEvents(submission.action.success);
     console.log({resultingEvents})
