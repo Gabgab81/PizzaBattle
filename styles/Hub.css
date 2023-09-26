@@ -1,0 +1,15 @@
+.Hub {
+  position: absolute;
+  left: 2px;
+  top: 10px;
+  image-rendering: pixelated;
+}
+
+.Hub .Combatant {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.Hub .Combatant_type {
+  display: none;
+}

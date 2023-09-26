@@ -69,6 +69,9 @@ class Overworld {
     }
 
     init(){
+
+      this.hub = new Hub();
+      this.hub.init(document.querySelector(".game-container"));
   
       this.startMap(window.OverworldMaps.DemoRoom);
 
@@ -78,7 +81,7 @@ class Overworld {
       this.directionInput = new DirectionInput();
       this.directionInput.init();
 
-      this.startGameLoop()
+      this.startGameLoop();
       
       // this.map.startCutscene([
         
