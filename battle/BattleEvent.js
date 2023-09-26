@@ -122,6 +122,40 @@ class BattleEvent {
     resolve();
   }
 
+  giveXp(resolve) {
+    let amount = this.event.xp;
+    const {combatant} = this.event;
+    const step = async () => {
+      if (amount > 0) {
+        amount -= 1;
+        combatant.xp += 1;
+
+        //Check if we've hit level up point
+        if (combatant.xp === combatant.maxXp) {
+          const onNewEvent = event => {
+            return new Promise(resolve => {
+              const battleEvent = new BattleEvent(event, this.battle);
+              battleEvent.init(resolve);
+            })
+          }
+          combatant.xp = 0;
+          combatant.maxXp = 100;
+          combatant.level += 1;
+          await onNewEvent({
+            type: "textMessage", 
+            text: `You reach level ${combatant.level}!`
+          });
+        }
+
+        combatant.update();
+        requestAnimationFrame(step);
+        return;
+      }
+      resolve();
+    }
+    requestAnimationFrame(step);
+  }
+
   animation(resolve) {
     const fn = BattleAnimations[this.event.animation];
     fn(this.event, resolve);

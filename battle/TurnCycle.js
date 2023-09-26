@@ -1,6 +1,7 @@
 class TurnCycle {
-  constructor({ battle, onNewEvent }) {
+  constructor({ battle, onNewEvent, onWinner }) {
     this.battle = battle;
+    this.onWinner = onWinner;
     this.onNewEvent = onNewEvent;
     this.currentTeam = "player"; // or "enemy"
   }
@@ -34,6 +35,11 @@ class TurnCycle {
     }
 
     if (submission.instanceId) {
+
+      //Add to list to persist to player state later
+      this.battle.usedInstanceIds[submission.instanceId] = true;
+
+      //Removeing item from state
       this.battle.items = this.battle.items.filter(i => i.instanceId !== submission.instanceId)
     }
     
@@ -61,6 +67,24 @@ class TurnCycle {
       await this.onNewEvent({
         type: "textMessage", text: `${submission.target.name} is ruined!`
       });
+
+      if (submission.target.team === "enemy" ) {
+
+        const playerActivePizzaId = this.battle.activeCombatants.player;
+        const xp = submission.target.givesXp;
+
+        await this.onNewEvent({
+          type: "textMessage", 
+          text: `Gained ${xp} XP!`
+        });
+
+        await this.onNewEvent({
+          type: "giveXp",
+          xp,
+          combatant: this.battle.combatants[playerActivePizzaId],
+        })
+      }
+      
     }
     // console.log("after if targetDead")
     //Do we have a winning team?
@@ -70,13 +94,14 @@ class TurnCycle {
         type: "textMessage",
         text: `Winner!!`
       });
-      //END THE BATTLE -> TODO
+      //END THE BATTLE
+      this.onWinner(winner);
       return;
     }
 
     //We have a dead target, but still no winner, so bring in a replacement
     if (targetDead) {
-      // console.log("inside if targetDead 2")
+      console.log("inside if targetDead 2")
       const replacement = await this.onNewEvent({
         type: "replacementMenu",
         team: submission.target.team,
@@ -135,10 +160,10 @@ class TurnCycle {
   }
 
   async init() {
-    // await this.onNewEvent({
-    //   type: "textMessage",
-    //   text: "The battle is starting!",
-    // })
+    await this.onNewEvent({
+      type: "textMessage",
+      text: `Your battle with ${this.battle.enemy.name} has stared!!!`,
+    })
 
     //Starting the first turn!
     this.turn();
