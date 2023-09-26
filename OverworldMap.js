@@ -127,9 +127,10 @@ window.OverworldMaps = {
           talking: [
             {
               events: [
-                { type: "textMessage", text: "huh??", faceHero: "npcA"},
-                { type: "textMessage", text: "What do you want??"},
-                { who: "hero", type: "walk", direction: "left" },
+                { type: "textMessage", text: "My pizza is better than yours!!", faceHero: "npcA"},
+                { type: "battle", enemyId: "beth"},
+                // { type: "textMessage", text: "What do you want??"},
+                // { who: "hero", type: "walk", direction: "left" },
               ]
             }
           ]
@@ -145,6 +146,14 @@ window.OverworldMaps = {
           //   { type: "walk", direction: "right" },
           //   { type: "walk", direction: "down" },
           // ]
+          talking: [
+            {
+              events: [
+                { type: "textMessage", text: "You dare to challenge me???", faceHero: "npcB"},
+                { type: "battle", enemyId: "erio"},
+              ]
+            }
+          ]
         })
       },
       walls : {
@@ -159,13 +168,13 @@ window.OverworldMaps = {
           {
             events: [
 
-              { who: "npcB", type: "walk", direction: "left" },
-              { who: "npcB", type: "stand", direction: "up" },
-              { type: "textMessage", text: "Stop!!!!" },
-              { who: "npcB", type: "walk", direction: "right" },
-              { who: "npcB", type: "stand", direction: "down" },
-              { who: "hero", type: "walk", direction: "down" },
-              { who: "hero", type: "walk", direction: "left" },
+              // { who: "npcB", type: "walk", direction: "left" },
+              // { who: "npcB", type: "stand", direction: "up" },
+              // { type: "textMessage", text: "Stop!!!!" },
+              // { who: "npcB", type: "walk", direction: "right" },
+              // { who: "npcB", type: "stand", direction: "down" },
+              // { who: "hero", type: "walk", direction: "down" },
+              // { who: "hero", type: "walk", direction: "left" },
             ]
           }
         ],
@@ -193,13 +202,12 @@ window.OverworldMaps = {
         npcB: new Person({
           x: utils.withGrid(10),
           y: utils.withGrid(8),
-          src: "images/characters/people/npc3.png",
+          src: "images/characters/people/erio.png",
           talking: [
             {
               events: [
-                { type: "textMessage", text: "huh??", faceHero: "npcB"},
-                { type: "textMessage", text: "What do you want??"},
-                { who: "hero", type: "walk", direction: "left" },
+                { type: "textMessage", text: "You dare to challenge me???", faceHero: "npcB"},
+                { type: "battle", enemyId: "erio"},
               ]
             }
           ]
