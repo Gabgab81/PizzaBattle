@@ -35,12 +35,16 @@ class Overworld {
 
         //Draw Upper Layer
         this.map.drawUpperImage(this.ctx, cameraPerson);
-
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            step();
-          })
-        }, 8)
+        // console.log("outside")
+        // console.log(this.map.isPaused)
+        if (!this.map.isPaused) {
+          // console.log("inside")
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              step();
+            })
+          }, 1)
+        }
           
       }
       step();
@@ -50,6 +54,15 @@ class Overworld {
       new KeyPressListener("Enter", () => {
         //Is there a person here to talk to?
         this.map.checkActionCutscene()
+      })
+
+      new KeyPressListener("Escape", () => {
+        //Open pause menu
+        if (!this.map.isCutscenePlaying) {
+          this.map.startCutscene([
+            { type: "pause" }
+          ])
+        }
       })
     }
 
