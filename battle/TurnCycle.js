@@ -89,12 +89,20 @@ class TurnCycle {
     // console.log("after if targetDead")
     //Do we have a winning team?
     const winner = this.getWinningTeam();
-    if (winner) {
+    if (winner === "player") {
       await this.onNewEvent({
         type: "textMessage",
         text: `Winner!!`
       });
       //END THE BATTLE
+      this.onWinner(winner);
+      return;
+    };
+    if (winner === "enemy") {
+      await this.onNewEvent({
+        type: "textMessage",
+        text: `Loser!!`
+      });
       this.onWinner(winner);
       return;
     }
